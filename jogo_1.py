@@ -13,6 +13,8 @@ altura_fundo = 513
 comprimento_letras = 50
 altura_letras = 50
 
+posicao_x_letra = 225
+posicao_y_letra = 0
 window = pygame.display.set_mode((comprimento, altura))
 pygame.display.set_caption('Diploma Battle')
 
@@ -20,20 +22,35 @@ background = pygame.image.load('imagens/fachada_insper.jpg').convert()
 background_scale = pygame.transform.scale(background, (comprimento_fundo, altura_fundo))
 letra_I = pygame.image.load('imagens/letra_i.jpeg').convert_alpha()
 letra_D = pygame.image.load('imagens/letra_d.jpeg').convert_alpha()
-letra_I_menor = pygame.transform.scale(letra_I, (comprimento_letras, altura_letras))
-letra_D_menor = pygame.transform.scale(letra_D, (comprimento_letras, altura_letras))
+letra_I = pygame.transform.scale(letra_I, (comprimento_letras, altura_letras))
+letra_D = pygame.transform.scale(letra_D, (comprimento_letras, altura_letras))
 
-letra_ix = 225
-letra_iy = 0
+class Letra(pygame.sprite.Sprite):
+    def __init__(self, img):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
 
-letra_dx = 225
-letra_dy = 0
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.x = posicao_x_letra
+        self.rect.y = posicao_y_letra
+        self.speedx = random.randint(-3, 3)
+        self.speedy = random.randint(2, 9)
 
-letra_i_speedx = random.randint(-3,3)
-letra_i_speedy =  random.randint(2,9)
+    def update(self):
+        # Atualizando a posição do meteoro
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
+        # Se o meteoro passar do final da tela, volta para cima e sorteia
+        # novas posições e velocidades
+        if self.rect.top > altura or self.rect.right < 0 or self.rect.left > comprimento:
+            self.rect.x =posicao_x_letra
+            self.rect.y = posicao_y_letra
+            self.speedx = random.randint(-3, 3)
+            self.speedy = random.randint(2, 9)
 
-letra_d_speedx = random.randint(-3,3)
-letra_d_speedy =  random.randint(2,9)
+letraI = Letra(letra_I)
+letraD = Letra(letra_D)
 
 game = True
 
@@ -48,28 +65,15 @@ while game:
         
         if event.type == pygame.QUIT:
             game = False
-
-    letra_ix += letra_i_speedx
-    letra_iy += letra_i_speedy
-
-    letra_dx += letra_d_speedx
-    letra_dy += letra_d_speedy
-
-    if letra_iy > altura or letra_ix > comprimento or letra_ix < 0:
-        letra_ix = 225
-        letra_iy = 0
-        letra_i_speedx = random.randint(-3,3)
-        letra_i_speedy =  random.randint(2,9)
-    if letra_dy > altura or letra_dx > comprimento or letra_dx < 0:
-        letra_dx = 225
-        letra_dy = 0
-        letra_d_speedx = random.randint(-3,3)
-        letra_d_speedy =  random.randint(2,9)
     
+    letraI.update()
+    letraD.update()
+
+
     window.fill((0, 0, 0))  # Preenche com a cor preta
     window.blit(background_scale, (-20, 0))
-    window.blit(letra_I_menor,(letra_ix,letra_iy))
-    window.blit(letra_D_menor,(letra_dx,letra_dy))
+    window.blit(letraI.image, letraI.rect)
+    window.blit(letraD.image, letraD.rect)
     #Atualiza jogo
     pygame.display.update()  
 
