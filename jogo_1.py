@@ -10,8 +10,8 @@ altura = 450
 comprimento_fundo = 568
 altura_fundo = 513
 
-comprimento_letras = 50
-altura_letras = 50
+comprimento_letras = 40
+altura_letras = 40
 
 posicao_x_letra = 225
 posicao_y_letra = 0
@@ -20,8 +20,8 @@ pygame.display.set_caption('Diploma Battle')
 
 background = pygame.image.load('imagens/fachada_insper.jpg').convert()
 background_scale = pygame.transform.scale(background, (comprimento_fundo, altura_fundo))
-letra_I = pygame.image.load('imagens/letra_i.jpeg').convert_alpha()
-letra_D = pygame.image.load('imagens/letra_d.jpeg').convert_alpha()
+letra_I = pygame.image.load('imagens/letra_i.png').convert_alpha()
+letra_D = pygame.image.load('imagens/letra_d.png').convert_alpha()
 letra_I = pygame.transform.scale(letra_I, (comprimento_letras, altura_letras))
 letra_D = pygame.transform.scale(letra_D, (comprimento_letras, altura_letras))
 
