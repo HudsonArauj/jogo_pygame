@@ -49,8 +49,13 @@ class Letra(pygame.sprite.Sprite):
             self.speedx = random.randint(-3, 3)
             self.speedy = random.randint(2, 9)
 
-letraI = Letra(letra_I)
-letraD = Letra(letra_D)
+todas_letras = pygame.sprite.Group()
+
+for a in range(3):
+    letraI = Letra(letra_I)
+    letraD = Letra(letra_D)
+    todas_letras.add(letraI)
+    todas_letras.add(letraD)
 
 game = True
 
@@ -66,14 +71,12 @@ while game:
         if event.type == pygame.QUIT:
             game = False
     
-    letraI.update()
-    letraD.update()
-
+    todas_letras.update()
 
     window.fill((0, 0, 0))  # Preenche com a cor preta
     window.blit(background_scale, (-20, 0))
-    window.blit(letraI.image, letraI.rect)
-    window.blit(letraD.image, letraD.rect)
+
+    todas_letras.draw(window)
     #Atualiza jogo
     pygame.display.update()  
 
