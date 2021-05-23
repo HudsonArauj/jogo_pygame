@@ -6,6 +6,8 @@ pygame.init()
 window = pygame.display.set_mode((500, 600))
 pygame.display.set_caption('Diploma Battle')
 
+background = pygame.image.load('imagens/fachada_insper.jpg').convert()
+
 game = True
 
 #Loop principal
@@ -20,6 +22,7 @@ while game:
 
     
     window.fill((0, 0, 0))  # Preenche com a cor preta
+    window.blit(background, (10, 10))
 
     #Atualiza jogo
     pygame.display.update()  
