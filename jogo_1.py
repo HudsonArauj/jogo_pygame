@@ -3,10 +3,12 @@ import pygame
 pygame.init()
 
 #tela principal
-window = pygame.display.set_mode((500, 600))
+window = pygame.display.set_mode((450, 500))
 pygame.display.set_caption('Diploma Battle')
 
 background = pygame.image.load('imagens/fachada_insper.jpg').convert()
+background_scale = pygame.transform.scale(background, (568, 513))
+#623x550
 
 game = True
 
@@ -22,7 +24,7 @@ while game:
 
     
     window.fill((0, 0, 0))  # Preenche com a cor preta
-    window.blit(background, (10, 10))
+    window.blit(background_scale, (-20, 0))
 
     #Atualiza jogo
     pygame.display.update()  
