@@ -118,6 +118,7 @@ while game:
     colisoes = pygame.sprite.spritecollide(jogador, todas_letras, True)
     if len(colisoes)>0:
         game = False
+        
     window.fill((0, 0, 0))  # Preenche com a cor preta
     window.blit(background, (-20, 0))
 
