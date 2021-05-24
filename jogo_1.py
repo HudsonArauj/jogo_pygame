@@ -61,16 +61,29 @@ class Aluno(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = comprimento/2
         self.rect.bottom = altura - 5
+        self.speedx = -9
+    
+    def update(self):
+        self.rect.x += self.speedx
+        # Não deixa o jogador sair da tela.
+        if self.rect.right > comprimento:
+            self.rect.right = comprimento
+
+        if self.rect.left < 0:
+            self.rect.left = 0
 
 
-todas_letras = pygame.sprite.Group()
+
+
+todos_elementos = pygame.sprite.Group()
 jogador = Aluno(jogador_imagem)
+todos_elementos.add(jogador)
 
 for a in range(3):
     letra_I = Letra(letra_I_imagem)
     letra_D = Letra(letra_D_imagem)
-    todas_letras.add(letra_I)
-    todas_letras.add(letra_D)
+    todos_elementos.add(letra_I)
+    todos_elementos.add(letra_D)
 
 game = True
 clock = pygame.time.Clock() #Ajustando a velocidade
@@ -84,13 +97,14 @@ while game:
         if event.type == pygame.QUIT:
             game = False
     
-    todas_letras.update()
+    todos_elementos.update()
+
 
     window.fill((0, 0, 0))  # Preenche com a cor preta
     window.blit(background, (-20, 0))
 
-    todas_letras.draw(window)
-    window.blit(jogador.image, jogador.rect)
+    todos_elementos.draw(window)
+
     #Atualiza jogo
     pygame.display.update()  
 
