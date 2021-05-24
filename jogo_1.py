@@ -76,6 +76,7 @@ class Aluno(pygame.sprite.Sprite):
 
 
 todos_elementos = pygame.sprite.Group()
+todas_letras = pygame.sprite.Group()
 jogador = Aluno(jogador_imagem)
 todos_elementos.add(jogador)
 
@@ -84,6 +85,8 @@ for a in range(4):
     letra_D = Letra(letra_D_imagem)
     todos_elementos.add(letra_I)
     todos_elementos.add(letra_D)
+    todas_letras.add(letra_I)
+    todas_letras.add(letra_D)
 
 game = True
 clock = pygame.time.Clock() #Ajustando a velocidade
@@ -111,8 +114,10 @@ while game:
 
     
     todos_elementos.update()
-
-
+    #verifica se tem colisões com as letras
+    colisoes = pygame.sprite.spritecollide(jogador, todas_letras, True)
+    if len(colisoes)>0:
+        game = False
     window.fill((0, 0, 0))  # Preenche com a cor preta
     window.blit(background, (-20, 0))
 
