@@ -15,6 +15,9 @@ altura_letras = 40
 
 posicao_x_letra = 225
 posicao_y_letra = 0
+comprimento_jogador = 90
+altura_jogador = 90
+
 window = pygame.display.set_mode((comprimento, altura))
 pygame.display.set_caption('Diploma Battle')
 
@@ -24,6 +27,8 @@ letra_I = pygame.image.load('imagens/letra_i.png').convert_alpha()
 letra_D = pygame.image.load('imagens/letra_d.png').convert_alpha()
 letra_I = pygame.transform.scale(letra_I, (comprimento_letras, altura_letras))
 letra_D = pygame.transform.scale(letra_D, (comprimento_letras, altura_letras))
+jogador_imagem = pygame.image.load('imagens/player2.png').convert_alpha()
+jogador_imagem = pygame.transform.scale(jogador_imagem, (comprimento_jogador, altura_jogador))
 
 class Letra(pygame.sprite.Sprite):
     def __init__(self, img):
@@ -49,7 +54,21 @@ class Letra(pygame.sprite.Sprite):
             self.speedx = random.randint(-3, 3)
             self.speedy = random.randint(2, 9)
 
+class aluno(pygame.sprite.Sprite):
+    def __init__(self, img):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.centerx = comprimento/2
+        self.rect.bottom = altura - 10
+
+
+
+
 todas_letras = pygame.sprite.Group()
+jogador = aluno(jogador_imagem)
 
 for a in range(3):
     letraI = Letra(letra_I)
@@ -77,6 +96,7 @@ while game:
     window.blit(background_scale, (-20, 0))
 
     todas_letras.draw(window)
+    window.blit(jogador.image, jogador.rect)
     #Atualiza jogo
     pygame.display.update()  
 
