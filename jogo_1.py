@@ -61,7 +61,7 @@ class Aluno(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = comprimento/2
         self.rect.bottom = altura - 5
-        self.speedx = -9
+        self.speedx = 0
     
     def update(self):
         self.rect.x += self.speedx
@@ -79,7 +79,7 @@ todos_elementos = pygame.sprite.Group()
 jogador = Aluno(jogador_imagem)
 todos_elementos.add(jogador)
 
-for a in range(3):
+for a in range(4):
     letra_I = Letra(letra_I_imagem)
     letra_D = Letra(letra_D_imagem)
     todos_elementos.add(letra_I)
@@ -88,6 +88,8 @@ for a in range(3):
 game = True
 clock = pygame.time.Clock() #Ajustando a velocidade
 FPS = 30
+v = 8
+
 #Loop principal
 while game:
     clock.tick(FPS)
@@ -96,6 +98,17 @@ while game:
         
         if event.type == pygame.QUIT:
             game = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                jogador.speedx -= v
+            if event.key == pygame.K_RIGHT:
+                jogador.speedx += v
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT:
+                jogador.speedx += v
+            if event.key == pygame.K_RIGHT:
+                jogador.speedx -= v
+
     
     todos_elementos.update()
 
