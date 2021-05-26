@@ -29,6 +29,9 @@ letra_I_imagem = pygame.transform.scale(letra_I_imagem, (comprimento_letras, alt
 letra_D_imagem = pygame.transform.scale(letra_D_imagem, (comprimento_letras, altura_letras))
 jogador_imagem = pygame.image.load('imagens/player2.png').convert_alpha()
 jogador_imagem = pygame.transform.scale(jogador_imagem, (comprimento_jogador, altura_jogador))
+aviao_imagem = pygame.image.load('imagens/aviao_branco.png').convert_alpha()
+aviao_imagem = pygame.transform.scale(aviao_imagem, (comprimento_letras, altura_letras))
+
 
 class Letra(pygame.sprite.Sprite):
     def __init__(self, img):
@@ -54,7 +57,7 @@ class Letra(pygame.sprite.Sprite):
             self.speedy = random.randint(2, 9)
 
 class Aluno(pygame.sprite.Sprite):
-    def __init__(self, img):
+    def __init__(self, img, todos_elementos, todos_avioes, aviao_imagem):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
         self.image = img
@@ -62,6 +65,9 @@ class Aluno(pygame.sprite.Sprite):
         self.rect.centerx = comprimento/2
         self.rect.bottom = altura - 5
         self.speedx = 0
+        self.todos_elementos = todos_elementos
+        self.todos_avioes = todos_avioes
+        self.aviao_imagem = aviao_imagem
     
     def update(self):
         self.rect.x += self.speedx
@@ -72,12 +78,35 @@ class Aluno(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
 
+    def lancamento(self):
+        novo_aviao = Aviao(self.aviao_imagem,(comprimento + comprimento_jogador/2),(altura - altura_jogador/2))
+        self.todos_elementos.add(novo_aviao) 
+        self.todos_avioes.add(novo_aviao)
+         
+class Aviao(pygame.sprite.Sprite):
+    def __init__(self, img, posicao_y, posicao_x):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.y = posicao_y
+        self.x = posicao_x
+        self.speedy = -5
+    
+    def update(self):
+        self.y += self.speedy
+        if self.y < 0:
+            self.kill()
+
+
+
 
 
 
 todos_elementos = pygame.sprite.Group()
 todas_letras = pygame.sprite.Group()
-jogador = Aluno(jogador_imagem)
+todos_avioes = pygame.sprite.Group()
+
+jogador = Aluno(jogador_imagem, todos_elementos, todos_avioes, aviao_imagem)
 todos_elementos.add(jogador)
 
 for a in range(4):
@@ -106,6 +135,8 @@ while game:
                 jogador.speedx -= v
             if event.key == pygame.K_RIGHT:
                 jogador.speedx += v
+            if event.key == pygame.K_SPACE:
+                jogador.lancamento()
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 jogador.speedx += v
@@ -117,7 +148,8 @@ while game:
     #verifica se tem colisões com as letras
     colisoes = pygame.sprite.spritecollide(jogador, todas_letras, True)
     if len(colisoes)>0:
-        game = False
+        #game = False
+        print('colidiu')
         
     window.fill((0, 0, 0))  # Preenche com a cor preta
     window.blit(background, (-20, 0))
