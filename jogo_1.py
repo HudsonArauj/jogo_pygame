@@ -68,6 +68,8 @@ class Aluno(pygame.sprite.Sprite):
         self.todos_elementos = todos_elementos
         self.todos_avioes = todos_avioes
         self.aviao_imagem = aviao_imagem
+        self.direcao = 1  #Começa olhando pra direita
+    
     
     def update(self):
         self.rect.x += self.speedx
@@ -79,10 +81,13 @@ class Aluno(pygame.sprite.Sprite):
             self.rect.left = 0
 
     def lancamento(self):
-        novo_aviao = Aviao(self.aviao_imagem, (self.rect.y+altura_jogador/3),  self.rect.right)
+        if self.direcao == 1:
+            novo_aviao = Aviao(self.aviao_imagem, self.rect.centery,  self.rect.right)
+        else:
+            novo_aviao = Aviao(self.aviao_imagem, self.rect.centery,  (self.rect.left-comprimento_letras))
         self.todos_elementos.add(novo_aviao) 
         self.todos_avioes.add(novo_aviao)
-         
+            
 class Aviao(pygame.sprite.Sprite):
     def __init__(self, img, posicao_y, posicao_x):
         pygame.sprite.Sprite.__init__(self)
@@ -133,8 +138,10 @@ while game:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 jogador.speedx -= v
+                jogador.direcao = 0
             if event.key == pygame.K_RIGHT:
                 jogador.speedx += v
+                jogador.direcao = 1
             if event.key == pygame.K_SPACE:
                 jogador.lancamento()
         if event.type == pygame.KEYUP:
