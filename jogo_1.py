@@ -27,7 +27,7 @@ letra_I_imagem = pygame.image.load('imagens/letra_i.png').convert_alpha()
 letra_D_imagem = pygame.image.load('imagens/letra_d.png').convert_alpha()
 letra_I_imagem = pygame.transform.scale(letra_I_imagem, (comprimento_letras, altura_letras))
 letra_D_imagem = pygame.transform.scale(letra_D_imagem, (comprimento_letras, altura_letras))
-jogador_imagem = pygame.image.load('imagens/player2.png').convert_alpha()
+jogador_imagem = pygame.image.load('imagens/prof1.png').convert_alpha()
 jogador_imagem = pygame.transform.scale(jogador_imagem, (comprimento_jogador, altura_jogador))
 aviao_imagem = pygame.image.load('imagens/aviao_branco.png').convert_alpha()
 aviao_imagem = pygame.transform.scale(aviao_imagem, (comprimento_letras, altura_letras))
@@ -79,7 +79,7 @@ class Aluno(pygame.sprite.Sprite):
             self.rect.left = 0
 
     def lancamento(self):
-        novo_aviao = Aviao(self.aviao_imagem,(comprimento + comprimento_jogador/2),(altura - altura_jogador/2))
+        novo_aviao = Aviao(self.aviao_imagem, (self.rect.y+altura_jogador/3),  self.rect.right)
         self.todos_elementos.add(novo_aviao) 
         self.todos_avioes.add(novo_aviao)
          
@@ -88,13 +88,13 @@ class Aviao(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
-        self.y = posicao_y
-        self.x = posicao_x
+        self.rect.y = posicao_y
+        self.rect.x = posicao_x
         self.speedy = -5
     
     def update(self):
-        self.y += self.speedy
-        if self.y < 0:
+        self.rect.y += self.speedy
+        if self.rect.y < 0:
             self.kill()
 
 
