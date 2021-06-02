@@ -25,8 +25,6 @@ recursos['letra_I_imagem'] = pygame.image.load('imagens/letra_i.png').convert_al
 recursos['letra_D_imagem'] = pygame.image.load('imagens/letra_d.png').convert_alpha()
 recursos['letra_I_imagem'] = pygame.transform.scale(recursos['letra_I_imagem'], (comprimento_letras, altura_letras))
 recursos['letra_D_imagem'] = pygame.transform.scale(recursos['letra_D_imagem'], (comprimento_letras, altura_letras))
-recursos['jogador_imagem'] = pygame.image.load('imagens/prof1.png').convert_alpha()
-recursos['jogador_imagem'] = pygame.transform.scale(recursos['jogador_imagem'], (comprimento_jogador, altura_jogador))
 recursos['aviao_imagem'] = pygame.image.load('imagens/aviao_branco.png').convert_alpha()
 recursos['aviao_imagem'] = pygame.transform.scale(recursos['aviao_imagem'], (comprimento_letras, altura_letras))
 pygame.mixer.music.load('sons/fundodojogo.mp3')
@@ -34,6 +32,14 @@ pygame.mixer.music.set_volume(0.4)
 recursos['hit_professor'] = pygame.mixer.Sound('sons/atingeprof.wav')
 recursos['lancamento_aviao'] = pygame.mixer.Sound('sons/lançamento.wav')
 recursos['hit_aluno'] = pygame.mixer.Sound('sons/atingealuno.wav')
+
+corrida = []
+for i in range(1,11):
+    nome_arquivo = 'imagens/mov{}.png'.format(i)
+    jogador_imagem = pygame.image.load(nome_arquivo).convert_alpha()
+    jogador_imagem = pygame.transform.scale(jogador_imagem, (comprimento_jogador, altura_jogador))
+    corrida.append(jogador_imagem)
+recursos['corrida'] = corrida
 
 
 class Letra(pygame.sprite.Sprite):
@@ -63,7 +69,7 @@ class Aluno(pygame.sprite.Sprite):
     def __init__(self, recursos, grupos):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
-        self.image = recursos['jogador_imagem']
+        self.image = recursos['corrida']
         self.rect = self.image.get_rect()
         self.rect.centerx = comprimento/2
         self.rect.bottom = altura - 5
@@ -103,6 +109,53 @@ class Aviao(pygame.sprite.Sprite):
         self.rect.y += self.speedy
         if self.rect.y < 0:
             self.kill()
+
+class Movimento(pygame.sprite.Sprite):
+    # Construtor da classe.
+    def _init_(self, center, recursos):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite._init_(self)
+
+        # Armazena a animação da corrida
+        self.corrida = recursos['corrida']
+
+        # Inicia o processo de animação colocando a primeira imagem na tela.
+        self.frame = 0  # Armazena o índice atual na animação
+        self.image = self.corrida[self.frame]  # Pega a primeira imagem
+        self.rect = self.image.get_rect()
+        self.rect.center = center  # Posiciona o centro da imagem
+
+        # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
+        self.last_update = pygame.time.get_ticks()
+
+        # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
+        # Quando pygame.time.get_ticks() - self.last_update > self.frame_ticks a
+        # próxima imagem da animação será mostrada
+        self.frame_ticks = 50
+
+    def update(self):
+        # Verifica o tick atual.
+        agora = pygame.time.get_ticks()
+        # Verifica quantos ticks se passaram desde a ultima mudança de frame.
+        elapsed_ticks = agora - self.last_update
+
+        # Se já está na hora de mudar de imagem...
+        if elapsed_ticks > self.frame_ticks:
+            # Marca o tick da nova imagem.
+            self.last_update = agora
+
+            # Avança um quadro.
+            self.frame += 1
+
+            # Verifica se já chegou no final da animação.
+            if self.frame == len(self.corrida):
+                self.kill()
+            else:
+                # Se ainda não chegou ao fim da explosão, troca de imagem.
+                center = self.rect.center
+                self.image = self.corrida[self.frame]
+                self.rect = self.image.get_rect()
+                self.rect.center = center
 
 todos_elementos = pygame.sprite.Group()
 todas_letras = pygame.sprite.Group()
