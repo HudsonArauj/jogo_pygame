@@ -34,13 +34,28 @@ recursos['lancamento_aviao'] = pygame.mixer.Sound('sons/lançamento.wav')
 recursos['hit_aluno'] = pygame.mixer.Sound('sons/atingealuno.wav')
 
 corrida = []
+professor = []
+
 for i in range(1,11):
     nome_arquivo = 'imagens/mov{}.png'.format(i)
     jogador_imagem = pygame.image.load(nome_arquivo).convert_alpha()
     jogador_imagem = pygame.transform.scale(jogador_imagem, (comprimento_jogador, altura_jogador))
     corrida.append(jogador_imagem)
 recursos['corrida'] = corrida
-
+i = 0
+while i < 8:
+    if i <= 3:
+        nome_arquivo2 = 'imagens/prof1.png'
+        professor_imagem = pygame.image.load(nome_arquivo2).convert_alpha()
+        professor_imagem = pygame.transform.scale(professor_imagem, (comprimento_jogador, altura_jogador))
+        professor.append(professor_imagem)
+    else:
+        nome_arquivo2 = 'imagens/prof2.png'
+        professor_imagem = pygame.image.load(nome_arquivo2).convert_alpha()
+        professor_imagem = pygame.transform.scale(professor_imagem, (comprimento_jogador, altura_jogador))
+        professor.append(professor_imagem)
+    i += 1
+recursos['professor_imagem'] = professor
 
 class Letra(pygame.sprite.Sprite):
     def __init__(self, img):
@@ -54,10 +69,10 @@ class Letra(pygame.sprite.Sprite):
         self.speedy = random.randint(2, 9)
 
     def update(self):
-        # Atualizando a posição do meteoro
+        # Atualizando a posição da letra
         self.rect.x += self.speedx
         self.rect.y += self.speedy
-        # Se o meteoro passar do final da tela, volta para cima e sorteia
+        # Se a letra passar do final da tela, volta para cima e sorteia
         # novas posições e velocidades
         if self.rect.top > altura or self.rect.right < 0 or self.rect.left > comprimento:
             self.rect.x =posicao_x_letra
@@ -114,6 +129,22 @@ class Aviao(pygame.sprite.Sprite):
         if self.rect.y < 0:
             self.kill()
 
+class Professor(pygame.sprite.Sprite):
+    def __init__(self, recursos, grupos):
+        pygame.sprite.Sprite.__init__(self)
+        self.pos = 0
+        self.image = recursos['professor_imagem'][self.pos]
+        self.rect = self.image.get_rect()
+        self.rect.centerx = comprimento/2
+        self.rect.top = 5
+        self.grupos = grupos
+        self.recursos = recursos
+    def update(self):
+        self.pos = (self.pos+1)%len(self.recursos['professor_imagem']) #faz as imagens formarem um loop
+        self.image = self.recursos['professor_imagem'][self.pos]
+
+
+
 todos_elementos = pygame.sprite.Group()
 todas_letras = pygame.sprite.Group()
 todos_avioes = pygame.sprite.Group()
@@ -123,6 +154,8 @@ grupos['todos_elementos'] = todos_elementos
 grupos['todas_letras'] = todas_letras
 grupos['todos_avioes'] = todos_avioes
 
+chefe = Professor(recursos, grupos)
+todos_elementos.add(chefe)
 jogador = Aluno(recursos, grupos)
 todos_elementos.add(jogador)
 
