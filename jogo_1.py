@@ -88,8 +88,7 @@ class Aluno(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
         if self.speedx > 0:
-            self.pos = (self.pos+1)%len(self.recursos['corrida'])
-    
+            self.pos = (self.pos+1)%len(self.recursos['corrida']) #faz as imagens formarem um loop
             self.image = self.recursos['corrida'][self.pos]
 
     def lancamento(self):
