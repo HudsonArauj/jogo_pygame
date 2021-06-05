@@ -31,9 +31,9 @@ recursos['aviao_imagem'] = pygame.image.load('imagens/aviao_branco.png').convert
 recursos['aviao_imagem'] = pygame.transform.scale(recursos['aviao_imagem'], (comprimento_letras, altura_letras))
 pygame.mixer.music.load('sons/fundodojogo.mp3')
 pygame.mixer.music.set_volume(0.4)
-recursos['hit_professor'] = pygame.mixer.Sound('sons/atingeprof.wav')
+recursos['hit_aluno'] = pygame.mixer.Sound('sons/atingeprof.wav')
 recursos['lancamento_aviao'] = pygame.mixer.Sound('sons/lançamento.wav')
-recursos['hit_aluno'] = pygame.mixer.Sound('sons/atingealuno.wav')
+recursos['hit_professor'] = pygame.mixer.Sound('sons/atingealuno.wav')
 
 corrida = []
 professor = []
@@ -217,6 +217,10 @@ while estado != ACABOU:
     #verifica se tem colisões com as letras
 
     if estado == JOGANDO:
+        colisao_avi = pygame.sprite.spritecollide(chefe, todos_avioes, True)
+        if len(colisao_avi)>0:
+            recursos['hit_professor'].play()
+            
         colisoes = pygame.sprite.spritecollide(jogador, todas_letras, True)
         letras = [recursos['letra_D_imagem'], recursos['letra_I_imagem']]
         for a in colisoes: # As chaves são os elementos do primeiro grupo (meteoros) que colidiram com alguma bala
@@ -227,8 +231,8 @@ while estado != ACABOU:
             todas_letras.add(imagem)
         if len(colisoes)>0:
             recursos['hit_aluno'].play()
-            jogador.kill()
-            estado = COLIDINDO
+            # jogador.kill()
+            # estado = COLIDINDO
     elif estado == COLIDINDO:
         state = ACABOU
 
