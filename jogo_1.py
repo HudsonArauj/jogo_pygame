@@ -9,11 +9,13 @@ altura = 450
 comprimento_fundo = 568
 altura_fundo = 513
 comprimento_letras = 40
-altura_letras = 40
+altura_letras = 40            #537 x 1369 professor
 posicao_x_letra = 225
 posicao_y_letra = 0
-comprimento_jogador = 90
-altura_jogador = 90
+comprimento_jogador = 80       # 595 x 742 jogador
+altura_jogador = 100
+comprimento_professor = 55
+altura_professor = 137
 
 window = pygame.display.set_mode((comprimento, altura))
 pygame.display.set_caption('Diploma Battle')
@@ -47,12 +49,12 @@ while i < 8:
     if i <= 3:
         nome_arquivo2 = 'imagens/prof1.png'
         professor_imagem = pygame.image.load(nome_arquivo2).convert_alpha()
-        professor_imagem = pygame.transform.scale(professor_imagem, (comprimento_jogador, altura_jogador))
+        professor_imagem = pygame.transform.scale(professor_imagem, (comprimento_professor, altura_professor))
         professor.append(professor_imagem)
     else:
         nome_arquivo2 = 'imagens/prof2.png'
         professor_imagem = pygame.image.load(nome_arquivo2).convert_alpha()
-        professor_imagem = pygame.transform.scale(professor_imagem, (comprimento_jogador, altura_jogador))
+        professor_imagem = pygame.transform.scale(professor_imagem, (comprimento_professor, altura_professor))
         professor.append(professor_imagem)
     i += 1
 recursos['professor_imagem'] = professor
@@ -63,8 +65,8 @@ class Letra(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.x = posicao_x_letra
-        self.rect.y = posicao_y_letra
+        self.rect.x = posicao_x_letra + comprimento_professor/2
+        self.rect.y = posicao_y_letra + altura_professor/2
         self.speedx = random.randint(-3, 3)
         self.speedy = random.randint(2, 9)
 
@@ -75,8 +77,8 @@ class Letra(pygame.sprite.Sprite):
         # Se a letra passar do final da tela, volta para cima e sorteia
         # novas posições e velocidades
         if self.rect.top > altura or self.rect.right < 0 or self.rect.left > comprimento:
-            self.rect.x =posicao_x_letra
-            self.rect.y = posicao_y_letra
+            self.rect.x =posicao_x_letra + comprimento_professor/2
+            self.rect.y = posicao_y_letra + altura_professor/2
             self.speedx = random.randint(-3, 3)
             self.speedy = random.randint(2, 9)
 
@@ -133,8 +135,8 @@ class Professor(pygame.sprite.Sprite):
     def __init__(self, recursos, grupos):
         pygame.sprite.Sprite.__init__(self)
         self.pos = 0
-        self.image = recursos['professor_imagem'][self.pos]
-        self.rect = self.image.get_rect()
+        self.image = recursos['professor_imagem'][self.pos]   #537 x 1369 professor
+        self.rect = self.image.get_rect()     # 595 x 742 jogador
         self.rect.centerx = comprimento/2
         self.rect.top = 5
         self.grupos = grupos
