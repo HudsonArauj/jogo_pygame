@@ -179,28 +179,33 @@ for a in range(3):
 
 pygame.mixer.music.play(loops=-1)
 
-game = True
+ACABOU = 0
+JOGANDO = 1
+COLIDINDO = 2
+estado = JOGANDO
+
 clock = pygame.time.Clock() #Ajustando a velocidade
 FPS = 30
 v = 8
 
 #Loop principal
-while game:
+while estado != ACABOU:
     clock.tick(FPS)
 
     for event in pygame.event.get():
         
         if event.type == pygame.QUIT:
-            game = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                jogador.speedx -= v
-                jogador.direcao = 0
-            if event.key == pygame.K_RIGHT:
-                jogador.speedx += v
-                jogador.direcao = 1
-            if event.key == pygame.K_SPACE:
-                jogador.lancamento()
+            estado = ACABOU
+        if estado == JOGANDO:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    jogador.speedx -= v
+                    jogador.direcao = 0
+                if event.key == pygame.K_RIGHT:
+                    jogador.speedx += v
+                    jogador.direcao = 1
+                if event.key == pygame.K_SPACE:
+                    jogador.lancamento()
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 jogador.speedx += v
@@ -210,20 +215,22 @@ while game:
     
     todos_elementos.update()
     #verifica se tem colisões com as letras
-    # colisoes = pygame.sprite.spritecollide(jogador, todas_letras, True, True)
-    
-    colisoes = pygame.sprite.spritecollide(jogador, todas_letras, True)
-    letras = [recursos['letra_D_imagem'], recursos['letra_I_imagem']]
-    for a in colisoes: # As chaves são os elementos do primeiro grupo (meteoros) que colidiram com alguma bala
-        # O meteoro e destruido e precisa ser recriado
-        random.shuffle(letras)
-        imagem = Letra(letras[0])
-        todos_elementos.add(imagem)
-        todas_letras.add(imagem)
-    if len(colisoes)>0:
-        #game = False
-        print('colidiu')
-        recursos['hit_aluno'].play()
+
+    if estado == JOGANDO:
+        colisoes = pygame.sprite.spritecollide(jogador, todas_letras, True)
+        letras = [recursos['letra_D_imagem'], recursos['letra_I_imagem']]
+        for a in colisoes: # As chaves são os elementos do primeiro grupo (meteoros) que colidiram com alguma bala
+            # O meteoro e destruido e precisa ser recriado
+            random.shuffle(letras)
+            imagem = Letra(letras[0])
+            todos_elementos.add(imagem)
+            todas_letras.add(imagem)
+        if len(colisoes)>0:
+            recursos['hit_aluno'].play()
+            jogador.kill()
+            estado = COLIDINDO
+    elif estado == COLIDINDO:
+        state = ACABOU
 
     window.fill((0, 0, 0))  # Preenche com a cor preta
     window.blit(recursos['background'], (-20, 0))
