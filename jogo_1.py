@@ -95,6 +95,9 @@ class Aluno(pygame.sprite.Sprite):
         self.grupos = grupos
         self.recursos = recursos
         self.direcao = 1  #Começa olhando pra direita
+
+        self.ultimo_tiro = pygame.time.get_ticks()
+        self.lancamento_aviao = 500
     
     def update(self):
         self.rect.x += self.speedx
@@ -109,13 +112,18 @@ class Aluno(pygame.sprite.Sprite):
             self.image = self.recursos['corrida'][self.pos]
 
     def lancamento(self):
-        if self.direcao == 1:
-            novo_aviao = Aviao(self.recursos, self.rect.centery,  self.rect.right)
-        else:
-            novo_aviao = Aviao(self.recursos, self.rect.centery,  (self.rect.left-comprimento_letras))
-        self.grupos['todos_elementos'].add(novo_aviao) 
-        self.grupos['todos_avioes'].add(novo_aviao)
-        self.recursos['lancamento_aviao'].play()
+        agora  = pygame.time.get_ticks()
+
+        colapso_aviao = agora -self.ultimo_tiro
+        if colapso_aviao > self.lancamento_aviao:
+            self.lancamento_aviao = agora
+            if self.direcao == 1:
+                novo_aviao = Aviao(self.recursos, self.rect.centery,  self.rect.right)
+            else:
+                novo_aviao = Aviao(self.recursos, self.rect.centery,  (self.rect.left-comprimento_letras))
+            self.grupos['todos_elementos'].add(novo_aviao) 
+            self.grupos['todos_avioes'].add(novo_aviao)
+            self.recursos['lancamento_aviao'].play()
             
 class Aviao(pygame.sprite.Sprite):
     def __init__(self, recursos, posicao_y, posicao_x):
@@ -161,7 +169,7 @@ todos_elementos.add(chefe)
 jogador = Aluno(recursos, grupos)
 todos_elementos.add(jogador)
 
-for a in range(4):
+for a in range(3):
     letra_I = Letra(recursos['letra_I_imagem'])
     letra_D = Letra(recursos['letra_D_imagem'])
     todos_elementos.add(letra_I)
