@@ -9,11 +9,13 @@ altura = 450
 comprimento_fundo = 568
 altura_fundo = 513
 comprimento_letras = 40
-altura_letras = 40
+altura_letras = 40            #537 x 1369 professor
 posicao_x_letra = 225
 posicao_y_letra = 0
-comprimento_jogador = 90
-altura_jogador = 90
+comprimento_jogador = 80       # 595 x 742 jogador
+altura_jogador = 100
+comprimento_professor = 55
+altura_professor = 137
 
 window = pygame.display.set_mode((comprimento, altura))
 pygame.display.set_caption('Diploma Battle')
@@ -34,13 +36,28 @@ recursos['lancamento_aviao'] = pygame.mixer.Sound('sons/lançamento.wav')
 recursos['hit_aluno'] = pygame.mixer.Sound('sons/atingealuno.wav')
 
 corrida = []
+professor = []
+
 for i in range(1,11):
     nome_arquivo = 'imagens/mov{}.png'.format(i)
     jogador_imagem = pygame.image.load(nome_arquivo).convert_alpha()
     jogador_imagem = pygame.transform.scale(jogador_imagem, (comprimento_jogador, altura_jogador))
     corrida.append(jogador_imagem)
 recursos['corrida'] = corrida
-
+i = 0
+while i < 8:
+    if i <= 3:
+        nome_arquivo2 = 'imagens/prof1.png'
+        professor_imagem = pygame.image.load(nome_arquivo2).convert_alpha()
+        professor_imagem = pygame.transform.scale(professor_imagem, (comprimento_professor, altura_professor))
+        professor.append(professor_imagem)
+    else:
+        nome_arquivo2 = 'imagens/prof2.png'
+        professor_imagem = pygame.image.load(nome_arquivo2).convert_alpha()
+        professor_imagem = pygame.transform.scale(professor_imagem, (comprimento_professor, altura_professor))
+        professor.append(professor_imagem)
+    i += 1
+recursos['professor_imagem'] = professor
 
 class Letra(pygame.sprite.Sprite):
     def __init__(self, img):
@@ -48,20 +65,20 @@ class Letra(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.x = posicao_x_letra
-        self.rect.y = posicao_y_letra
+        self.rect.x = posicao_x_letra + comprimento_professor/2
+        self.rect.y = posicao_y_letra + altura_professor/2
         self.speedx = random.randint(-3, 3)
         self.speedy = random.randint(2, 9)
 
     def update(self):
-        # Atualizando a posição do meteoro
+        # Atualizando a posição da letra
         self.rect.x += self.speedx
         self.rect.y += self.speedy
-        # Se o meteoro passar do final da tela, volta para cima e sorteia
+        # Se a letra passar do final da tela, volta para cima e sorteia
         # novas posições e velocidades
         if self.rect.top > altura or self.rect.right < 0 or self.rect.left > comprimento:
-            self.rect.x =posicao_x_letra
-            self.rect.y = posicao_y_letra
+            self.rect.x =posicao_x_letra + comprimento_professor/2
+            self.rect.y = posicao_y_letra + altura_professor/2
             self.speedx = random.randint(-3, 3)
             self.speedy = random.randint(2, 9)
 
@@ -69,7 +86,8 @@ class Aluno(pygame.sprite.Sprite):
     def __init__(self, recursos, grupos):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
-        self.image = recursos['corrida']
+        self.pos = 2
+        self.image = recursos['corrida'][self.pos]
         self.rect = self.image.get_rect()
         self.rect.centerx = comprimento/2
         self.rect.bottom = altura - 5
@@ -77,6 +95,9 @@ class Aluno(pygame.sprite.Sprite):
         self.grupos = grupos
         self.recursos = recursos
         self.direcao = 1  #Começa olhando pra direita
+
+        self.ultimo_tiro = pygame.time.get_ticks()
+        self.lancamento_aviao = 500
     
     def update(self):
         self.rect.x += self.speedx
@@ -86,15 +107,23 @@ class Aluno(pygame.sprite.Sprite):
 
         if self.rect.left < 0:
             self.rect.left = 0
+        if self.speedx > 0:
+            self.pos = (self.pos+1)%len(self.recursos['corrida']) #faz as imagens formarem um loop
+            self.image = self.recursos['corrida'][self.pos]
 
     def lancamento(self):
-        if self.direcao == 1:
-            novo_aviao = Aviao(self.recursos, self.rect.centery,  self.rect.right)
-        else:
-            novo_aviao = Aviao(self.recursos, self.rect.centery,  (self.rect.left-comprimento_letras))
-        self.grupos['todos_elementos'].add(novo_aviao) 
-        self.grupos['todos_avioes'].add(novo_aviao)
-        self.recursos['lancamento_aviao'].play()
+        agora  = pygame.time.get_ticks()
+
+        colapso_aviao = agora -self.ultimo_tiro
+        if colapso_aviao > self.lancamento_aviao:
+            self.lancamento_aviao = agora
+            if self.direcao == 1:
+                novo_aviao = Aviao(self.recursos, self.rect.centery,  self.rect.right)
+            else:
+                novo_aviao = Aviao(self.recursos, self.rect.centery,  (self.rect.left-comprimento_letras))
+            self.grupos['todos_elementos'].add(novo_aviao) 
+            self.grupos['todos_avioes'].add(novo_aviao)
+            self.recursos['lancamento_aviao'].play()
             
 class Aviao(pygame.sprite.Sprite):
     def __init__(self, recursos, posicao_y, posicao_x):
@@ -110,52 +139,21 @@ class Aviao(pygame.sprite.Sprite):
         if self.rect.y < 0:
             self.kill()
 
-class Movimento(pygame.sprite.Sprite):
-    # Construtor da classe.
-    def _init_(self, center, recursos):
-        # Construtor da classe mãe (Sprite).
-        pygame.sprite.Sprite._init_(self)
-
-        # Armazena a animação da corrida
-        self.corrida = recursos['corrida']
-
-        # Inicia o processo de animação colocando a primeira imagem na tela.
-        self.frame = 0  # Armazena o índice atual na animação
-        self.image = self.corrida[self.frame]  # Pega a primeira imagem
-        self.rect = self.image.get_rect()
-        self.rect.center = center  # Posiciona o centro da imagem
-
-        # Guarda o tick da primeira imagem, ou seja, o momento em que a imagem foi mostrada
-        self.last_update = pygame.time.get_ticks()
-
-        # Controle de ticks de animação: troca de imagem a cada self.frame_ticks milissegundos.
-        # Quando pygame.time.get_ticks() - self.last_update > self.frame_ticks a
-        # próxima imagem da animação será mostrada
-        self.frame_ticks = 50
-
+class Professor(pygame.sprite.Sprite):
+    def __init__(self, recursos, grupos):
+        pygame.sprite.Sprite.__init__(self)
+        self.pos = 0
+        self.image = recursos['professor_imagem'][self.pos]   #537 x 1369 professor
+        self.rect = self.image.get_rect()     # 595 x 742 jogador
+        self.rect.centerx = comprimento/2
+        self.rect.top = 5
+        self.grupos = grupos
+        self.recursos = recursos
     def update(self):
-        # Verifica o tick atual.
-        agora = pygame.time.get_ticks()
-        # Verifica quantos ticks se passaram desde a ultima mudança de frame.
-        elapsed_ticks = agora - self.last_update
+        self.pos = (self.pos+1)%len(self.recursos['professor_imagem']) #faz as imagens formarem um loop
+        self.image = self.recursos['professor_imagem'][self.pos]
 
-        # Se já está na hora de mudar de imagem...
-        if elapsed_ticks > self.frame_ticks:
-            # Marca o tick da nova imagem.
-            self.last_update = agora
 
-            # Avança um quadro.
-            self.frame += 1
-
-            # Verifica se já chegou no final da animação.
-            if self.frame == len(self.corrida):
-                self.kill()
-            else:
-                # Se ainda não chegou ao fim da explosão, troca de imagem.
-                center = self.rect.center
-                self.image = self.corrida[self.frame]
-                self.rect = self.image.get_rect()
-                self.rect.center = center
 
 todos_elementos = pygame.sprite.Group()
 todas_letras = pygame.sprite.Group()
@@ -166,10 +164,12 @@ grupos['todos_elementos'] = todos_elementos
 grupos['todas_letras'] = todas_letras
 grupos['todos_avioes'] = todos_avioes
 
+chefe = Professor(recursos, grupos)
+todos_elementos.add(chefe)
 jogador = Aluno(recursos, grupos)
 todos_elementos.add(jogador)
 
-for a in range(4):
+for a in range(3):
     letra_I = Letra(recursos['letra_I_imagem'])
     letra_D = Letra(recursos['letra_D_imagem'])
     todos_elementos.add(letra_I)
@@ -179,28 +179,33 @@ for a in range(4):
 
 pygame.mixer.music.play(loops=-1)
 
-game = True
+ACABOU = 0
+JOGANDO = 1
+COLIDINDO = 2
+estado = JOGANDO
+
 clock = pygame.time.Clock() #Ajustando a velocidade
 FPS = 30
 v = 8
 
 #Loop principal
-while game:
+while estado != ACABOU:
     clock.tick(FPS)
 
     for event in pygame.event.get():
         
         if event.type == pygame.QUIT:
-            game = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                jogador.speedx -= v
-                jogador.direcao = 0
-            if event.key == pygame.K_RIGHT:
-                jogador.speedx += v
-                jogador.direcao = 1
-            if event.key == pygame.K_SPACE:
-                jogador.lancamento()
+            estado = ACABOU
+        if estado == JOGANDO:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    jogador.speedx -= v
+                    jogador.direcao = 0
+                if event.key == pygame.K_RIGHT:
+                    jogador.speedx += v
+                    jogador.direcao = 1
+                if event.key == pygame.K_SPACE:
+                    jogador.lancamento()
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 jogador.speedx += v
@@ -210,20 +215,26 @@ while game:
     
     todos_elementos.update()
     #verifica se tem colisões com as letras
-    # colisoes = pygame.sprite.spritecollide(jogador, todas_letras, True, True)
-    
-    colisoes = pygame.sprite.spritecollide(jogador, todas_letras, True)
-    letras = [recursos['letra_D_imagem'], recursos['letra_I_imagem']]
-    for a in colisoes: # As chaves são os elementos do primeiro grupo (meteoros) que colidiram com alguma bala
-        # O meteoro e destruido e precisa ser recriado
-        random.shuffle(letras)
-        imagem = Letra(letras[0])
-        todos_elementos.add(imagem)
-        todas_letras.add(imagem)
-    if len(colisoes)>0:
-        #game = False
-        print('colidiu')
-        recursos['hit_aluno'].play()
+
+    if estado == JOGANDO:
+        colisao_avi = pygame.sprite.spritecollide(chefe, todos_avioes, True)
+        if len(colisao_avi)>0:
+            recursos['hit_professor'].play()
+            
+        colisoes = pygame.sprite.spritecollide(jogador, todas_letras, True)
+        letras = [recursos['letra_D_imagem'], recursos['letra_I_imagem']]
+        for a in colisoes: # As chaves são os elementos do primeiro grupo (meteoros) que colidiram com alguma bala
+            # O meteoro e destruido e precisa ser recriado
+            random.shuffle(letras)
+            imagem = Letra(letras[0])
+            todos_elementos.add(imagem)
+            todas_letras.add(imagem)
+        if len(colisoes)>0:
+            recursos['hit_aluno'].play()
+            # jogador.kill()
+            # estado = COLIDINDO
+    elif estado == COLIDINDO:
+        state = ACABOU
 
     window.fill((0, 0, 0))  # Preenche com a cor preta
     window.blit(recursos['background'], (-20, 0))
