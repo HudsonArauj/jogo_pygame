@@ -16,6 +16,8 @@ comprimento_jogador = 80       # 595 x 742 jogador
 altura_jogador = 100
 comprimento_professor = 55
 altura_professor = 137
+comprimento_aviao = 30
+altura_aviao = 45
 
 window = pygame.display.set_mode((comprimento, altura))
 pygame.display.set_caption('Diploma Battle')
@@ -27,23 +29,30 @@ recursos['letra_I_imagem'] = pygame.image.load('imagens/letra_i.png').convert_al
 recursos['letra_D_imagem'] = pygame.image.load('imagens/letra_d.png').convert_alpha()
 recursos['letra_I_imagem'] = pygame.transform.scale(recursos['letra_I_imagem'], (comprimento_letras, altura_letras))
 recursos['letra_D_imagem'] = pygame.transform.scale(recursos['letra_D_imagem'], (comprimento_letras, altura_letras))
-recursos['aviao_imagem'] = pygame.image.load('imagens/aviao_branco.png').convert_alpha()
-recursos['aviao_imagem'] = pygame.transform.scale(recursos['aviao_imagem'], (comprimento_letras, altura_letras))
+recursos['aviao_imagem'] = pygame.image.load('imagens/aviao.png').convert_alpha()
+recursos['aviao_imagem'] = pygame.transform.scale(recursos['aviao_imagem'], (comprimento_aviao, altura_aviao))
 pygame.mixer.music.load('sons/fundodojogo.mp3')
 pygame.mixer.music.set_volume(0.4)
 recursos['hit_professor'] = pygame.mixer.Sound('sons/atingeprof.wav')
 recursos['lancamento_aviao'] = pygame.mixer.Sound('sons/lançamento.wav')
 recursos['hit_aluno'] = pygame.mixer.Sound('sons/atingealuno.wav')
 
-corrida = []
+corridad = []
+corridae = []
 professor = []
 
 for i in range(1,11):
-    nome_arquivo = 'imagens/mov{}.png'.format(i)
-    jogador_imagem = pygame.image.load(nome_arquivo).convert_alpha()
-    jogador_imagem = pygame.transform.scale(jogador_imagem, (comprimento_jogador, altura_jogador))
-    corrida.append(jogador_imagem)
-recursos['corrida'] = corrida
+    nome_arquivod = 'imagens/mov{}-d.png'.format(i)
+    nome_arquivoe = 'imagens/mov{}-e.png'.format(i)
+    jogador_imagemd = pygame.image.load(nome_arquivod).convert_alpha()
+    jogador_imagemd = pygame.transform.scale(jogador_imagemd, (comprimento_jogador, altura_jogador))
+    jogador_imageme = pygame.image.load(nome_arquivoe).convert_alpha()
+    jogador_imageme = pygame.transform.scale(jogador_imageme, (comprimento_jogador, altura_jogador))
+    corridad.append(jogador_imagemd)
+    corridae.append(jogador_imageme)
+recursos['corridad'] = corridad
+recursos['corridae'] = corridae
+
 i = 0
 while i < 8:
     if i <= 3:
@@ -87,7 +96,8 @@ class Aluno(pygame.sprite.Sprite):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
         self.pos = 2
-        self.image = recursos['corrida'][self.pos]
+        self.image = recursos['corridad'][self.pos]
+        self.image = recursos['corridae'][self.pos]
         self.rect = self.image.get_rect()
         self.rect.centerx = comprimento/2
         self.rect.bottom = altura - 5
@@ -108,8 +118,12 @@ class Aluno(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
         if self.speedx > 0:
-            self.pos = (self.pos+1)%len(self.recursos['corrida']) #faz as imagens formarem um loop
-            self.image = self.recursos['corrida'][self.pos]
+            self.pos = (self.pos+1)%len(self.recursos['corridad']) #faz as imagens formarem um loop
+            self.image = self.recursos['corridad'][self.pos]
+        if self.speedx < 0:
+            self.pos = (self.pos+1)%len(self.recursos['corridae']) #faz as imagens formarem um loop
+            self.image = self.recursos['corridae'][self.pos]
+        
 
     def lancamento(self):
         agora  = pygame.time.get_ticks()
