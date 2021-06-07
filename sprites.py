@@ -47,7 +47,7 @@ class Aluno(pygame.sprite.Sprite):
 
         #Só será possível atirar a cada 0,5 segundos
         self.ultimo_tiro = pygame.time.get_ticks()
-        self.lancamento_aviao = 500 
+        self.lancamento_aviao = 500
     
     def update(self):
         #Atualiza posição do aluno 
@@ -70,12 +70,11 @@ class Aluno(pygame.sprite.Sprite):
         #Verifica se pode jogar o avião
         agora  = pygame.time.get_ticks()
         #Verifica quantos ticks se passaram desde o último lançamento
-        colapso_aviao = agora -self.ultimo_tiro
-
+        colapso_aviao = agora - self.ultimo_tiro
         #Se já pode lançar novamente...
         if colapso_aviao > self.lancamento_aviao:
             #Marca o tick da nova imagem
-            self.lancamento_aviao = agora
+            self.ultimo_tiro = agora
             #O novo avião vai ser criado do lado em que o jogador estiver virado
             if self.direcao == 1:
                 #Sai da direita do jogador
@@ -83,9 +82,10 @@ class Aluno(pygame.sprite.Sprite):
             else:
                 #Sai da esquerda do jogador
                 novo_aviao = Aviao(self.recursos, self.rect.centery,  (self.rect.left-comprimento_letras))
-            self.grupos['todos_elementos'].add(novo_aviao) 
+            self.grupos['todos_elementos'].add(novo_aviao)
             self.grupos['todos_avioes'].add(novo_aviao)
             self.recursos['lancamento_aviao'].play()
+
 
 #Cria a classe avião            
 class Aviao(pygame.sprite.Sprite):

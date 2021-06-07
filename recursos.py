@@ -53,5 +53,5 @@ def carrega_recurso():
     recursos['lancamento_aviao'] = pygame.mixer.Sound(os.path.join(SND_DIR,'lançamento.wav'))
     recursos['hit_aluno'] = pygame.mixer.Sound(os.path.join(SND_DIR,'atingealuno.wav'))
 
-    recursos["fonte_placar"] = pygame.font.Font(os.path.join(FNT_DIR,'PressStart2P.ttf', 18))
+    recursos["fonte_placar"] = pygame.font.Font(os.path.join(FNT_DIR,'PressStart2P.ttf'), 18)
     return recursos

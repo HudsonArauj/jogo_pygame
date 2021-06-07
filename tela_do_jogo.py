@@ -76,7 +76,6 @@ def tela_jogo(window):
         #Atualiza a posição dos elementos do jogo
         todos_elementos.update()
 
-        
         if estado == JOGANDO:
             #Verifica se houve colisão entre o avião e o professor
             colisao_avi = pygame.sprite.spritecollide(chefe, todos_avioes, True, pygame.sprite.collide_mask)
@@ -97,16 +96,21 @@ def tela_jogo(window):
             if len(colisoes)>0:  #Se houver colisão, o aluno perde vida
                 recurso['hit_aluno'].play()  #Som se o aluno for atingido
                 jogador.kill()
+                
+                for s in todos_avioes.sprites():
+                    s.kill()
                 vidas -= 1
                 estado = COLIDINDO
                 tecla_apertada = {}
+                if vidas > 0:
+                    jogador = Aluno(recurso, grupos)
+                    todos_elementos.add(jogador)
+
         elif estado == COLIDINDO:
             if vidas == 0:  #Se acabarem as vidas o jogo acaba
                 estado = ACABOU
             else:
                 estado = JOGANDO
-                jogador = Aluno(recurso, grupos)
-                todos_elementos.add(jogador)
     
         window.fill((0, 0, 0))  # Preenche com a cor branca
         window.blit(recurso['background'], (-20, 0))
