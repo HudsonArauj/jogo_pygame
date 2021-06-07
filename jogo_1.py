@@ -76,6 +76,7 @@ class Letra(pygame.sprite.Sprite):
         # Construtor da classe mãe (Sprite).
         pygame.sprite.Sprite.__init__(self)
         self.image = img
+        self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.x = posicao_x_letra + comprimento_professor/2
         self.rect.y = posicao_y_letra + altura_professor/2
@@ -101,6 +102,7 @@ class Aluno(pygame.sprite.Sprite):
         self.pos = 2
         self.image = recursos['corridad'][self.pos]
         self.image = recursos['corridae'][self.pos]
+        self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.centerx = comprimento/2
         self.rect.bottom = altura - 5
@@ -146,6 +148,7 @@ class Aviao(pygame.sprite.Sprite):
     def __init__(self, recursos, posicao_y, posicao_x):
         pygame.sprite.Sprite.__init__(self)
         self.image = recursos['aviao_imagem']
+        self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.y = posicao_y
         self.rect.x = posicao_x
@@ -160,8 +163,9 @@ class Professor(pygame.sprite.Sprite):
     def __init__(self, recursos, grupos):
         pygame.sprite.Sprite.__init__(self)
         self.pos = 0
-        self.image = recursos['professor_imagem'][self.pos]   #537 x 1369 professor
-        self.rect = self.image.get_rect()     # 595 x 742 jogador
+        self.image = recursos['professor_imagem'][self.pos]   
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()     
         self.rect.centerx = comprimento/2
         self.rect.top = 5
         self.grupos = grupos
@@ -237,12 +241,12 @@ while estado != ACABOU:
     #verifica se tem colisões com as letras
 
     if estado == JOGANDO:
-        colisao_avi = pygame.sprite.spritecollide(chefe, todos_avioes, True)
+        colisao_avi = pygame.sprite.spritecollide(chefe, todos_avioes, True, pygame.sprite.collide_mask)
         if len(colisao_avi)>0:
             recursos['hit_professor'].play()
             placar += 10
             
-        colisoes = pygame.sprite.spritecollide(jogador, todas_letras, True)
+        colisoes = pygame.sprite.spritecollide(jogador, todas_letras, True, pygame.sprite.collide_mask)
         letras = [recursos['letra_D_imagem'], recursos['letra_I_imagem']]
         for a in colisoes: # As chaves são os elementos do primeiro grupo (meteoros) que colidiram com alguma bala
             # O meteoro e destruido e precisa ser recriado
