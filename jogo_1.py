@@ -71,7 +71,6 @@ recursos['hit_aluno'] = pygame.mixer.Sound('sons/atingealuno.wav')
 
 recursos["fonte_placar"] = pygame.font.Font('fonte/PressStart2P.ttf', 18)
 
-
 class Letra(pygame.sprite.Sprite):
     def __init__(self, img):
         # Construtor da classe mãe (Sprite).
@@ -111,7 +110,7 @@ class Aluno(pygame.sprite.Sprite):
         self.direcao = 1  #Começa olhando pra direita
 
         self.ultimo_tiro = pygame.time.get_ticks()
-        self.lancamento_aviao = 500
+        self.lancamento_aviao = 500 
     
     def update(self):
         self.rect.x += self.speedx
@@ -171,8 +170,6 @@ class Professor(pygame.sprite.Sprite):
         self.pos = (self.pos+1)%len(self.recursos['professor_imagem']) #faz as imagens formarem um loop
         self.image = self.recursos['professor_imagem'][self.pos]
 
-
-
 todos_elementos = pygame.sprite.Group()
 todas_letras = pygame.sprite.Group()
 todos_avioes = pygame.sprite.Group()
@@ -201,8 +198,10 @@ ACABOU = 0
 JOGANDO = 1
 COLIDINDO = 2
 estado = JOGANDO
-placar = 0
+
 tecla_apertada = {}
+placar = 0
+vidas = 5
 
 clock = pygame.time.Clock() #Ajustando a velocidade
 FPS = 30
@@ -234,7 +233,6 @@ while estado != ACABOU:
                 if event.key == pygame.K_RIGHT:
                     jogador.speedx -= v
 
-    
     todos_elementos.update()
     #verifica se tem colisões com as letras
 
@@ -256,12 +254,16 @@ while estado != ACABOU:
         if len(colisoes)>0:
             recursos['hit_aluno'].play()
             jogador.kill()
+            vidas -= 1
             estado = COLIDINDO
             tecla_apertada = {}
     elif estado == COLIDINDO:
-        estado = JOGANDO
-        jogador = Aluno(recursos, grupos)
-        todos_elementos.add(jogador)
+        if vidas == 0:
+            estado = ACABOU
+        else:
+            estado = JOGANDO
+            jogador = Aluno(recursos, grupos)
+            todos_elementos.add(jogador)
     
     window.fill((0, 0, 0))  # Preenche com a cor preta
     window.blit(recursos['background'], (-20, 0))
@@ -269,12 +271,13 @@ while estado != ACABOU:
 
     texto_superficie = recursos['fonte_placar'].render("{:05d}".format(placar), True, (255, 255, 0))
     text_rect = texto_superficie.get_rect()
-    text_rect.midtop = (40,  10)
+    text_rect.midtop = (50,  10)
     window.blit(texto_superficie, text_rect)
 
-
-    todos_elementos.draw(window)
-
+    texto_superficie = recursos['fonte_placar'].render(chr(9829) * vidas, True, (255, 0, 0))
+    text_rect = texto_superficie.get_rect()
+    text_rect.bottomleft = (10, altura - 10)
+    window.blit(texto_superficie, text_rect)
     #Atualiza jogo
     pygame.display.update()  
 
