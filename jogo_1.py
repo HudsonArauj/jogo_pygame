@@ -31,11 +31,6 @@ recursos['letra_I_imagem'] = pygame.transform.scale(recursos['letra_I_imagem'], 
 recursos['letra_D_imagem'] = pygame.transform.scale(recursos['letra_D_imagem'], (comprimento_letras, altura_letras))
 recursos['aviao_imagem'] = pygame.image.load('imagens/aviao.png').convert_alpha()
 recursos['aviao_imagem'] = pygame.transform.scale(recursos['aviao_imagem'], (comprimento_aviao, altura_aviao))
-pygame.mixer.music.load('sons/fundodojogo.mp3')
-pygame.mixer.music.set_volume(0.4)
-recursos['hit_professor'] = pygame.mixer.Sound('sons/atingeprof.wav')
-recursos['lancamento_aviao'] = pygame.mixer.Sound('sons/lançamento.wav')
-recursos['hit_aluno'] = pygame.mixer.Sound('sons/atingealuno.wav')
 
 corridad = []
 corridae = []
@@ -68,6 +63,15 @@ while i < 8:
     i += 1
 recursos['professor_imagem'] = professor
 
+pygame.mixer.music.load('sons/fundodojogo.mp3')
+pygame.mixer.music.set_volume(0.2)
+recursos['hit_professor'] = pygame.mixer.Sound('sons/atingeprof.wav')
+recursos['lancamento_aviao'] = pygame.mixer.Sound('sons/lançamento.wav')
+recursos['hit_aluno'] = pygame.mixer.Sound('sons/atingealuno.wav')
+
+recursos["fonte_placar"] = pygame.font.Font('fonte/PressStart2P.ttf', 18)
+
+
 class Letra(pygame.sprite.Sprite):
     def __init__(self, img):
         # Construtor da classe mãe (Sprite).
@@ -77,7 +81,7 @@ class Letra(pygame.sprite.Sprite):
         self.rect.x = posicao_x_letra + comprimento_professor/2
         self.rect.y = posicao_y_letra + altura_professor/2
         self.speedx = random.randint(-3, 3)
-        self.speedy = random.randint(2, 9)
+        self.speedy = random.randint(2, 7)
 
     def update(self):
         # Atualizando a posição da letra
@@ -197,6 +201,8 @@ ACABOU = 0
 JOGANDO = 1
 COLIDINDO = 2
 estado = JOGANDO
+placar = 0
+tecla_apertada = {}
 
 clock = pygame.time.Clock() #Ajustando a velocidade
 FPS = 30
@@ -212,6 +218,7 @@ while estado != ACABOU:
             estado = ACABOU
         if estado == JOGANDO:
             if event.type == pygame.KEYDOWN:
+                tecla_apertada[event.key] = True
                 if event.key == pygame.K_LEFT:
                     jogador.speedx -= v
                     jogador.direcao = 0
@@ -221,10 +228,11 @@ while estado != ACABOU:
                 if event.key == pygame.K_SPACE:
                     jogador.lancamento()
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT:
-                jogador.speedx += v
-            if event.key == pygame.K_RIGHT:
-                jogador.speedx -= v
+            if event.key in tecla_apertada and tecla_apertada[event.key]:
+                if event.key == pygame.K_LEFT:
+                    jogador.speedx += v
+                if event.key == pygame.K_RIGHT:
+                    jogador.speedx -= v
 
     
     todos_elementos.update()
@@ -234,6 +242,7 @@ while estado != ACABOU:
         colisao_avi = pygame.sprite.spritecollide(chefe, todos_avioes, True)
         if len(colisao_avi)>0:
             recursos['hit_professor'].play()
+            placar += 10
             
         colisoes = pygame.sprite.spritecollide(jogador, todas_letras, True)
         letras = [recursos['letra_D_imagem'], recursos['letra_I_imagem']]
@@ -243,15 +252,26 @@ while estado != ACABOU:
             imagem = Letra(letras[0])
             todos_elementos.add(imagem)
             todas_letras.add(imagem)
+
         if len(colisoes)>0:
             recursos['hit_aluno'].play()
-            # jogador.kill()
-            # estado = COLIDINDO
+            jogador.kill()
+            estado = COLIDINDO
+            tecla_apertada = {}
     elif estado == COLIDINDO:
-        state = ACABOU
-
+        estado = JOGANDO
+        jogador = Aluno(recursos, grupos)
+        todos_elementos.add(jogador)
+    
     window.fill((0, 0, 0))  # Preenche com a cor preta
     window.blit(recursos['background'], (-20, 0))
+    todos_elementos.draw(window)
+
+    texto_superficie = recursos['fonte_placar'].render("{:05d}".format(placar), True, (255, 255, 0))
+    text_rect = texto_superficie.get_rect()
+    text_rect.midtop = (50,  10)
+    window.blit(texto_superficie, text_rect)
+
 
     todos_elementos.draw(window)
 
