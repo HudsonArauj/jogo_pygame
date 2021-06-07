@@ -269,7 +269,7 @@ while estado != ACABOU:
 
     texto_superficie = recursos['fonte_placar'].render("{:05d}".format(placar), True, (255, 255, 0))
     text_rect = texto_superficie.get_rect()
-    text_rect.midtop = (50,  10)
+    text_rect.midtop = (40,  10)
     window.blit(texto_superficie, text_rect)
 
 
