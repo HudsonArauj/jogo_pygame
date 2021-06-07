@@ -102,7 +102,7 @@ class Letra(pygame.sprite.Sprite):
             self.rect.x =posicao_x_letra + comprimento_professor/2
             self.rect.y = posicao_y_letra + altura_professor/2
             self.speedx = random.randint(-3, 3)
-            self.speedy = random.randint(2, 9)
+            self.speedy = random.randint(2, 7)
 
 #Cria a classe aluno
 class Aluno(pygame.sprite.Sprite):
