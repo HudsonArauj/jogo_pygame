@@ -1,5 +1,5 @@
 from os import path
-
+#Contém as figuras e sons do jogo
 IMG_DIR = path.join(path.dirname(__file__), 'recursos', 'imagens')
 SND_DIR = path.join(path.dirname(__file__), 'recursos', 'sons')
 FNT_DIR = path.join(path.dirname(__file__), 'recursos', 'fonte')
@@ -21,3 +21,11 @@ comprimento_professor = 55
 altura_professor = 137
 comprimento_aviao = 30
 altura_aviao = 45
+comprimento_tela = 450
+altura_tela = 450
+#Cor preta
+BLACK = (0,0,0)
+#Estado para controle do fluxo de aplicação
+INIT = 0
+GAME = 1
+QUIT = 2
