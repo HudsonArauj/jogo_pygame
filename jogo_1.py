@@ -1,5 +1,5 @@
 import pygame
-from constantes import comprimento, altura
+from constantes import *
 from tela_do_jogo import tela_jogo
 from tela_inicio import tela_inicio
 
@@ -10,6 +10,13 @@ pygame.mixer.init()
 window = pygame.display.set_mode((comprimento, altura))
 pygame.display.set_caption('Diploma Battle')
 
-tela_jogo(window)  #Inicia a tela do jogo?
+estado = INIT
+while estado != QUIT:
+    if estado == INIT:
+        estado = tela_inicio(window)
+    elif estado == GAME:
+        estado = tela_jogo(window)
+    else:
+        estado = QUIT
 
 pygame.quit()  # Função do PyGame que finaliza os recursos utilizados
