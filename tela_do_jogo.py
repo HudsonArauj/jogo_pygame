@@ -3,7 +3,7 @@ from constantes import *
 from recursos import *
 from sprites import *
 
-def tela_jogo(window):
+def tela_jogo(tela):
     clock = pygame.time.Clock() #Variável para ajuste da velocidade
     
     recurso = carrega_recurso()
@@ -32,10 +32,9 @@ def tela_jogo(window):
 
     pygame.mixer.music.play(loops=-1)
     #Cria variáveis de estado
-    ACABOU = 0
-    JOGANDO = 1
-    COLIDINDO = 2
-    VERIFICA =3
+    ACABOU = 5
+    JOGANDO = 6
+    COLIDINDO = 7
     estado = JOGANDO
 
     tecla_apertada = {}
@@ -43,6 +42,7 @@ def tela_jogo(window):
     vidas = 5
     vida_prof = 30
 
+    tempo_ref = pygame.time.get_ticks()
     #Loop principal
     while estado != ACABOU:
         clock.tick(FPS)
@@ -78,12 +78,22 @@ def tela_jogo(window):
         todos_elementos.update()
 
         if estado == JOGANDO:
+            colisao_est = 
+            if len(colisao_est) > 0:
+                estrela.kill()
+                jogador.lancamento_aviao = 100
+                tempo_ref = pygame.time.get_ticks()
+            agora = pygame.time.get_ticks()
+            duracao = agora - tempo_ref
+            if duracao >= 5000:
+                jogador.lancamento_aviao = 500
             #Verifica se houve colisão entre o avião e o professor
             colisao_avi = pygame.sprite.spritecollide(chefe, todos_avioes, True, pygame.sprite.collide_mask)
             if len(colisao_avi)>0:  #Se houver colisão, o professor perde vida e o aluno ganha pontos
                 vida_prof -= 1
                 recurso['hit_professor'].play()  #Som se o professor for atingido
                 placar += 10
+                estado = COLIDINDO
             #Verifica se houve colisão entre o jogador e as letras                
             colisoes = pygame.sprite.spritecollide(jogador, todas_letras, True, pygame.sprite.collide_mask)
             letras = [recurso['letra_D_imagem'], recurso['letra_I_imagem']]
@@ -106,27 +116,36 @@ def tela_jogo(window):
                 if vidas > 0:
                     jogador = Aluno(recurso, grupos)
                     todos_elementos.add(jogador)
+                else:
+                    estado = ACABOU
 
         elif estado == COLIDINDO:
             if vidas == 0:  #Se acabarem as vidas o jogo acaba
                 estado = ACABOU
+            if vida_prof == 0:
+                estado = ACABOU
             else:
                 estado = JOGANDO
-    
-        window.fill((0, 0, 0))  # Preenche com a cor branca
-        window.blit(recurso['background'], (-20, 0))
-        todos_elementos.draw(window)  #Desenha os elementos do jogo
+
+        tela.fill((0, 0, 0))  # Preenche com a cor branca
+        tela.blit(recurso['background'], (-20, 0))
+        todos_elementos.draw(tela)  #Desenha os elementos do jogo
 
         #Desenha o placar 
         texto_superficie = recurso['fonte_placar'].render("{:05d}".format(placar), True, (255, 255, 0))
         text_rect = texto_superficie.get_rect()
         text_rect.midtop = (50,  10)
-        window.blit(texto_superficie, text_rect)
+        tela.blit(texto_superficie, text_rect)
 
         #Desenha as vidas
         texto_superficie = recurso['fonte_placar'].render(chr(9829) * vidas, True, (255, 0, 0))
         text_rect = texto_superficie.get_rect()
         text_rect.bottomleft = (10, altura - 10)
-        window.blit(texto_superficie, text_rect)
+        tela.blit(texto_superficie, text_rect)
         
         pygame.display.update()  #Mostra o novo frame para o jogador
+    if vidas == 0:
+        estado = FINAL_RUIM
+    if vida_prof == 0:
+        estado = FINAL_BOM
+    return estado

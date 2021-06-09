@@ -28,4 +28,6 @@ BLACK = (0,0,0)
 #Estado para controle do fluxo de aplicação
 INIT = 0
 GAME = 1
-QUIT = 2
+FINAL_BOM = 2
+FINAL_RUIM = 3
+QUIT = 4

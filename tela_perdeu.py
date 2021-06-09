@@ -2,7 +2,7 @@ import pygame
 from os import path
 from constantes import *
 
-def tela_inicio(tela):
+def tela_perdeu(tela):
     # Variável para o ajuste de velocidade
     clock = pygame.time.Clock()
 
@@ -26,8 +26,9 @@ def tela_inicio(tela):
                 acontecendo = False
 
             if event.type == pygame.KEYUP:
-                estado = GAME
-                acontecendo = False
+                if event.key == pygame.K_RETURN:
+                    estado = GAME
+                    acontecendo = False
         # A cada loop, redesenha o fundo e os sprites
         tela.fill(BLACK)
         tela.blit(background, background_rect)
