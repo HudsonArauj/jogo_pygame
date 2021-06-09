@@ -72,7 +72,7 @@ def tela_jogo(tela):
                 #Verifica se soltou alguma tecla
                 if event.type == pygame.KEYUP:
                     #Dependendo da tecla, altera a velocidade
-                    if event.key in tecla_apertada and tecla_apertada[event.key]:
+                    if event.key in tecla_apertada:
                         if event.key == pygame.K_LEFT:
                             jogador.speedx += v
                         if event.key == pygame.K_RIGHT:

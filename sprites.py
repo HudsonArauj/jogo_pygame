@@ -65,7 +65,6 @@ class Aluno(pygame.sprite.Sprite):
             self.pos = (self.pos+1)%len(self.recursos['corridae']) #faz as imagens formarem um loop
             self.image = self.recursos['corridae'][self.pos]
         
-
     def lancamento(self):
         #Verifica se pode jogar o avião
         agora  = pygame.time.get_ticks()
@@ -136,4 +135,3 @@ class Estrela(pygame.sprite.Sprite):
         self.rect.centerx = random.randint(comprimento_estrela/2, (comprimento - comprimento_estrela/2))
         self.grupos = grupos
         self.recursos = recursos
-
