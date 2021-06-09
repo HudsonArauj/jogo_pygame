@@ -86,11 +86,11 @@ def tela_jogo(tela):
             colisao_est = pygame.sprite.spritecollide(jogador, todas_estrelas, True, pygame.sprite.collide_mask)
             if len(colisao_est) > 0:
                 estrelas.kill()
-                jogador.lancamento_aviao = 100
+                jogador.lancamento_aviao = 250
                 tempo_ref = pygame.time.get_ticks()
             agora = pygame.time.get_ticks()
             duracao = agora - tempo_ref
-            if duracao >= 5000:
+            if duracao >= 3000:
                 jogador.lancamento_aviao = 500
             #Verifica se houve colisão entre o avião e o professor
             colisao_avi = pygame.sprite.spritecollide(chefe, todos_avioes, True, pygame.sprite.collide_mask)

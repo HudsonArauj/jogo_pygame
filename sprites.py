@@ -78,10 +78,10 @@ class Aluno(pygame.sprite.Sprite):
             #O novo avião vai ser criado do lado em que o jogador estiver virado
             if self.direcao == 1:
                 #Sai da direita do jogador
-                novo_aviao = Aviao(self.recursos, self.rect.centery,  self.rect.right)
+                novo_aviao = Aviao(self.recursos, self.rect.centery,  self.rect.right - 10)
             else:
                 #Sai da esquerda do jogador
-                novo_aviao = Aviao(self.recursos, self.rect.centery,  (self.rect.left-comprimento_letras))
+                novo_aviao = Aviao(self.recursos, self.rect.centery,  (self.rect.left-comprimento_letras + 10))
             self.grupos['todos_elementos'].add(novo_aviao)
             self.grupos['todos_avioes'].add(novo_aviao)
             self.recursos['lancamento_aviao'].play()
@@ -129,10 +129,10 @@ class Estrela(pygame.sprite.Sprite):
     def __init__(self, recursos, grupos):
          #Construtor da classe mãe(Sprite)
         pygame.sprite.Sprite.__init__(self)
-        self.image = recursos['aviao_imagem']
+        self.image = recursos['estrela_imagem']
         self.mask = pygame.mask.from_surface(self.image)   #Melhora colisão
         self.rect = self.image.get_rect()
-        self.rect.bottom = altura - 5
+        self.rect.bottom = altura - 10
         self.rect.centerx = random.randint(comprimento_estrela/2, (comprimento - comprimento_estrela/2))
         self.grupos = grupos
         self.recursos = recursos
