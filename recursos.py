@@ -12,7 +12,9 @@ def carrega_recurso():
     recursos['letra_D_imagem'] = pygame.transform.scale(recursos['letra_D_imagem'], (comprimento_letras, altura_letras))
     recursos['aviao_imagem'] = pygame.image.load(os.path.join(IMG_DIR,'aviao.png')).convert_alpha()
     recursos['aviao_imagem'] = pygame.transform.scale(recursos['aviao_imagem'], (comprimento_aviao, altura_aviao))
-    
+    recursos['estrela_imagem'] = pygame.image.load(os.path.join(IMG_DIR,'estrela.png')).convert_alpha()
+    recursos['estrela_imagem'] = pygame.transform.scale(recursos['estrela_imagem'], (comprimento_estrela, altura_estrela))
+
     corridad = []
     corridae = []
     professor = []
