@@ -23,6 +23,9 @@ comprimento_aviao = 30
 altura_aviao = 45
 comprimento_tela = 450
 altura_tela = 450
+comprimento_estrela = 34
+altura_estrela = 33
+
 #Cor preta
 BLACK = (0,0,0)
 #Estado para controle do fluxo de aplicação

@@ -1,4 +1,3 @@
-from jogo_pygame.sprites import Estrela
 import pygame 
 from constantes import *
 from recursos import *
