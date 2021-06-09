@@ -1,3 +1,4 @@
+from jogo_pygame.sprites import Estrela
 import pygame 
 from constantes import *
 from recursos import *
@@ -11,16 +12,21 @@ def tela_jogo(tela):
     todos_elementos = pygame.sprite.Group()  #Criando grupo com todos os elementos do jogo
     todas_letras = pygame.sprite.Group()     #Criando grupo com as letras do jogo
     todos_avioes = pygame.sprite.Group()     #Criando grupo com os aviões do jogo
+    todas_estrelas = pygame.sprite.Group()   #Criando grupo com as estrelas do jogo
 
     grupos = {}
     grupos['todos_elementos'] = todos_elementos
     grupos['todas_letras'] = todas_letras
     grupos['todos_avioes'] = todos_avioes
+    grupos['todas_estrelas'] = todas_estrelas
 
     chefe = Professor(recurso, grupos) #Criando o professor
     todos_elementos.add(chefe)     
     jogador = Aluno(recurso, grupos)  #Criando o jogador
     todos_elementos.add(jogador)
+    estrelas = Estrela(recurso, grupos)
+    todos_elementos.add(estrelas)
+    todas_estrelas.add(estrelas)
     #Criando as letras
     for a in range(3):
         letra_I = Letra(recurso['letra_I_imagem'])
@@ -78,9 +84,9 @@ def tela_jogo(tela):
         todos_elementos.update()
 
         if estado == JOGANDO:
-            colisao_est = 
+            colisao_est = pygame.sprite.spritecollide(jogador, todas_estrelas, True, pygame.sprite.collide_mask)
             if len(colisao_est) > 0:
-                estrela.kill()
+                estrelas.kill()
                 jogador.lancamento_aviao = 100
                 tempo_ref = pygame.time.get_ticks()
             agora = pygame.time.get_ticks()
