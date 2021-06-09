@@ -123,3 +123,17 @@ class Professor(pygame.sprite.Sprite):
     def update(self):
         self.pos = (self.pos+1)%len(self.recursos['professor_imagem']) #faz as imagens formarem um loop
         self.image = self.recursos['professor_imagem'][self.pos]
+
+#Cria a classe estrela
+class Estrela(pygame.sprite.Sprite):
+    def __init__(self, recursos, grupos):
+         #Construtor da classe mãe(Sprite)
+        pygame.sprite.Sprite.__init__(self)
+        self.image = recursos['aviao_imagem']
+        self.mask = pygame.mask.from_surface(self.image)   #Melhora colisão
+        self.rect = self.image.get_rect()
+        self.rect.bottom = altura - 5
+        self.rect.centerx = random.randint(comprimento_estrela/2, (comprimento - comprimento_estrela/2))
+        self.grupos = grupos
+        self.recursos = recursos
+
