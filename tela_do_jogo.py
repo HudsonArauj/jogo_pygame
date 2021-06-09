@@ -35,6 +35,7 @@ def tela_jogo(window):
     ACABOU = 0
     JOGANDO = 1
     COLIDINDO = 2
+    VERIFICA =3
     estado = JOGANDO
 
     tecla_apertada = {}
