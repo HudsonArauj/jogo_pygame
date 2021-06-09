@@ -132,7 +132,7 @@ class Estrela(pygame.sprite.Sprite):
         self.image = recursos['estrela_imagem']
         self.mask = pygame.mask.from_surface(self.image)   #Melhora colisão
         self.rect = self.image.get_rect()
-        self.rect.bottom = altura - 10
+        self.rect.bottom = altura - 25
         self.rect.centerx = random.randint(comprimento_estrela/2, (comprimento - comprimento_estrela/2))
         self.grupos = grupos
         self.recursos = recursos

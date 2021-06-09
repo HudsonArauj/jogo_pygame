@@ -19,8 +19,10 @@ while estado != QUIT:
     elif estado == GAME:
         estado = tela_jogo(window)
     elif estado == FINAL_RUIM:
+        pygame.mixer.music.set_volume(0)
         estado = tela_perdeu(window)
     elif estado == FINAL_BOM:
+        pygame.mixer.music.set_volume(0)
         estado = tela_ganhou(window)
     else:
         estado = QUIT

@@ -23,9 +23,8 @@ def tela_jogo(tela):
     todos_elementos.add(chefe)     
     jogador = Aluno(recurso, grupos)  #Criando o jogador
     todos_elementos.add(jogador)
-    estrelas = Estrela(recurso, grupos)
-    todos_elementos.add(estrelas)
-    todas_estrelas.add(estrelas)
+    tempo_estrela = random.randint(1, 600)
+    
     #Criando as letras
     for a in range(3):
         letra_I = Letra(recurso['letra_I_imagem'])
@@ -35,7 +34,7 @@ def tela_jogo(tela):
         todas_letras.add(letra_I)
         todas_letras.add(letra_D)
 
-    pygame.mixer.music.play(loops=-1)
+    pygame.mixer.music.play(loops=-1) #Toca música de fundo
     #Cria variáveis de estado
     ACABOU = 5
     JOGANDO = 6
@@ -45,7 +44,7 @@ def tela_jogo(tela):
     tecla_apertada = {}
     placar = 0
     vidas = 5
-    vida_prof = 30
+    vida_prof = 10
 
     tempo_ref = pygame.time.get_ticks()
     #Loop principal
@@ -78,6 +77,11 @@ def tela_jogo(tela):
                             jogador.speedx += v
                         if event.key == pygame.K_RIGHT:
                             jogador.speedx -= v
+        tempo_estrela -= 1
+        if tempo_estrela == 0: #Quando chega a 0, ele cria a letra
+            estrelas = Estrela(recurso, grupos)
+            todos_elementos.add(estrelas)
+            todas_estrelas.add(estrelas)
 
         #Atualiza a posição dos elementos do jogo
         todos_elementos.update()
@@ -86,6 +90,7 @@ def tela_jogo(tela):
             colisao_est = pygame.sprite.spritecollide(jogador, todas_estrelas, True, pygame.sprite.collide_mask)
             if len(colisao_est) > 0:
                 estrelas.kill()
+                tempo_estrela = random.randint(1, 600)
                 jogador.lancamento_aviao = 250
                 tempo_ref = pygame.time.get_ticks()
             agora = pygame.time.get_ticks()
