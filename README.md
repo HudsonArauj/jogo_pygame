@@ -20,11 +20,17 @@ Caso você perca ,FIM DE JOGO,aparecerá uma mensagem de não formado, mas apert
 
 Caso você ganhe, PARABÉNS! VOCÊ SE FORMOU!
 
+# Jogo com seus elementos 
+
+![alt text](https://github.com/HudsonMA98/jogo_pygame/blob/main/recursos/imagens/tela_jogo.png.png?raw=true)
+
 
 # Elementos gráficos e sonoros
 Todos os elementos utilizadas nesse jogo são de domínio público, disponibilizadas pelos autores em sites / blogs / foruns de jogos.
 
 imagens : https://freesound.org/people/unfa/packs/12256/ 
+
+https://cte.com.br/cases/gerenciamento/insper/
 
 
 efeitos sonoros utilizados: https://freesound.org/people/unfa/packs/12256/
