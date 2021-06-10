@@ -36,7 +36,7 @@ https://cte.com.br/cases/gerenciamento/insper/
 efeitos sonoros utilizados: https://freesound.org/people/unfa/packs/12256/
 
 # Para jogar o jogo:
-Instale as bibliotecas:
+Instale as biblioteca:
 
 pygame
 
