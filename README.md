@@ -16,6 +16,7 @@ O professor atira notas D e I que irá tirar suas vidas, seu maior objetivo é d
 
 O jogo também possui estrelas que aparecem de forma aleatória para lhe ajudar, com elas é possivel atirar,em menos intervalos de tempo, mais aviões!
 
+
 Caso você perca ,FIM DE JOGO,aparecerá uma mensagem de não formado, mas apertando a tecla enter você tem uma nova oportunidade para conseguir vencer o professor!
 
 Caso você ganhe, PARABÉNS! VOCÊ SE FORMOU!
@@ -39,6 +40,7 @@ efeitos sonoros utilizados: https://freesound.org/people/unfa/packs/12256/
 Instale as biblioteca:
 
 pygame
+os
 
 
 
