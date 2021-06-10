@@ -1,8 +1,7 @@
 # jogo_pygame
-![alt text](https://github.com/HudsonMA98/jogo_pygame/blob/main/recursos/imagens/aviao.png?raw=true)
 
-OneBit
-Link do jogo no youtube: 
+# OneBit
+Link do jogo no youtube: https://youtu.be/OmSxw7zcD5c
 
 Jogo desenvolvido como projeto final da diciplina Design de Software, pelos alunos: Dom Ruan Suzanoe, Grasielly Almeida Lima e Hudson Monteiro Araújo
 
@@ -10,7 +9,7 @@ INSPER 2021.1, Turma 1B - Engenharia
 
 Professor: Humberto Rodrigo Sandmann
 
-Como Jogar?
+# Como Jogar?
 Você é o aluno e controla ele nas direções do computador. Por meio da tecla espaço consegue atirar aviões para atingir seu oponente, o professor.
 
 O professor atira notas D e I que irá tirar suas vidas, seu maior objetivo é desviar dessas notas baixas e conseguir se formar no fim da graduação, caso contrário, será reprovado.
@@ -22,7 +21,7 @@ Caso você perca ,FIM DE JOGO,aparecerá uma mensagem de não formado, mas apert
 Caso você ganhe, PARABÉNS! VOCÊ SE FORMOU!
 
 
-Elementos gráficos e sonoros
+# Elementos gráficos e sonoros
 Todos os elementos utilizadas nesse jogo são de domínio público, disponibilizadas pelos autores em sites / blogs / foruns de jogos.
 
 imagens : https://freesound.org/people/unfa/packs/12256/ 
@@ -30,7 +29,7 @@ imagens : https://freesound.org/people/unfa/packs/12256/
 
 efeitos sonoros utilizados: https://freesound.org/people/unfa/packs/12256/
 
-Para jogar o jogo:
+# Para jogar o jogo:
 Instale as bibliotecas:
 
 pygame
