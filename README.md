@@ -22,7 +22,7 @@ Caso você ganhe, PARABÉNS! VOCÊ SE FORMOU!
 
 # Jogo com seus elementos 
 
-![alt text](https://github.com/HudsonMA98/jogo_pygame/blob/main/recursos/imagens/tela_jogo.png.png?raw=true)
+![alt text](https://github.com/HudsonMA98/jogo_pygame/blob/main/recursos/imagens/tela_jogo.png?raw=true)
 
 
 # Elementos gráficos e sonoros
