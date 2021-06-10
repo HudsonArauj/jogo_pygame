@@ -1,5 +1,3 @@
-# jogo_pygame
-
 # Diploma Battle
 Link do jogo no youtube: https://youtu.be/OmSxw7zcD5c
 
@@ -41,6 +39,7 @@ efeitos sonoros utilizados: https://freesound.org/people/unfa/packs/12256/
 Instale as biblioteca:
 
 pygame
+
 os
 
 
