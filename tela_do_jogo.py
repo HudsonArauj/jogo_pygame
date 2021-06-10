@@ -44,7 +44,7 @@ def tela_jogo(tela):
     tecla_apertada = {}
     placar = 0
     vidas = 5
-    vida_prof = 10
+    vida_prof = 30
 
     tempo_ref = pygame.time.get_ticks()
     #Loop principal
