@@ -3,6 +3,7 @@ from constantes import *
 from recursos import *
 from vilao import *
 from jogador import *
+from desenha import*
 
 def tela_jogo(tela):
     clock = pygame.time.Clock() #Variável para ajuste da velocidade
@@ -141,15 +142,11 @@ def tela_jogo(tela):
 
         #Desenha o placar 
         texto_superficie = recurso['fonte_placar'].render("{:05d}".format(placar), True, (255, 255, 0))
-        text_rect = texto_superficie.get_rect()
-        text_rect.midtop = (50,  10)
-        tela.blit(texto_superficie, text_rect)
+        desenha_placar(texto_superficie,tela)
 
         #Desenha as vidas
         texto_superficie = recurso['fonte_placar'].render(chr(9829) * vidas, True, (255, 0, 0))
-        text_rect = texto_superficie.get_rect()
-        text_rect.bottomleft = (10, altura - 10)
-        tela.blit(texto_superficie, text_rect)
+        desenha_vidas(texto_superficie,tela)
         
         pygame.display.update()  #Mostra o novo frame para o jogador
     if vidas == 0:

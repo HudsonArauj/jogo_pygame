@@ -55,7 +55,7 @@ class Aluno(pygame.sprite.Sprite):
                 novo_aviao = Aviao(self.recursos, self.rect.centery,  self.rect.right - 10)
             else:
                 #Sai da esquerda do jogador
-                novo_aviao = Aviao(self.recursos, self.rect.centery,  (self.rect.left-comprimento_letras + 10))
+                novo_aviao = Aviao(self.recursos, self.rect.centery,  (self.rect.left-dimensao_letras + 10))
             self.grupos['todos_elementos'].add(novo_aviao)
             self.grupos['todos_avioes'].add(novo_aviao)
             self.recursos['lancamento_aviao'].play()

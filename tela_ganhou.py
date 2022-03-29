@@ -9,7 +9,7 @@ def tela_ganhou(tela):
 
     # Carrega o fundo da tela inicial
     background = pygame.image.load(path.join(IMG_DIR, 'ganhou.png')).convert()
-    background = pygame.transform.scale(background, (comprimento_tela, altura_tela))
+    background = pygame.transform.scale(background, (dimensao_tela, dimensao_tela))
     background_rect = background.get_rect()
 
     acontecendo = True
