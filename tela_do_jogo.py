@@ -1,7 +1,8 @@
 import pygame 
 from constantes import *
 from recursos import *
-from sprites import *
+from vilao import *
+from jogador import *
 
 def tela_jogo(tela):
     clock = pygame.time.Clock() #Variável para ajuste da velocidade
@@ -113,11 +114,9 @@ def tela_jogo(tela):
                 imagem = Letra(letras[0])
                 todos_elementos.add(imagem)
                 todas_letras.add(imagem)
-
             if len(colisoes)>0:  #Se houver colisão, o aluno perde vida
                 recurso['hit_aluno'].play()  #Som se o aluno for atingido
                 jogador.kill()
-                
                 for s in todos_avioes.sprites():
                     s.kill()
                 vidas -= 1
@@ -128,7 +127,6 @@ def tela_jogo(tela):
                     todos_elementos.add(jogador)
                 else:
                     estado = ACABOU
-
         elif estado == COLIDINDO:
             if vidas == 0:  #Se acabarem as vidas o jogo acaba
                 estado = ACABOU
