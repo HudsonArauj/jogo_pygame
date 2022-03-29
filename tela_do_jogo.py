@@ -1,7 +1,9 @@
 import pygame 
 from constantes import *
 from recursos import *
-from sprites import *
+from vilao import *
+from jogador import *
+from desenha import*
 
 def tela_jogo(tela):
     clock = pygame.time.Clock() #Variável para ajuste da velocidade
@@ -113,11 +115,9 @@ def tela_jogo(tela):
                 imagem = Letra(letras[0])
                 todos_elementos.add(imagem)
                 todas_letras.add(imagem)
-
             if len(colisoes)>0:  #Se houver colisão, o aluno perde vida
                 recurso['hit_aluno'].play()  #Som se o aluno for atingido
                 jogador.kill()
-                
                 for s in todos_avioes.sprites():
                     s.kill()
                 vidas -= 1
@@ -128,7 +128,6 @@ def tela_jogo(tela):
                     todos_elementos.add(jogador)
                 else:
                     estado = ACABOU
-
         elif estado == COLIDINDO:
             if vidas == 0:  #Se acabarem as vidas o jogo acaba
                 estado = ACABOU
@@ -143,15 +142,11 @@ def tela_jogo(tela):
 
         #Desenha o placar 
         texto_superficie = recurso['fonte_placar'].render("{:05d}".format(placar), True, (255, 255, 0))
-        text_rect = texto_superficie.get_rect()
-        text_rect.midtop = (50,  10)
-        tela.blit(texto_superficie, text_rect)
+        desenha_placar(texto_superficie,tela)
 
         #Desenha as vidas
         texto_superficie = recurso['fonte_placar'].render(chr(9829) * vidas, True, (255, 0, 0))
-        text_rect = texto_superficie.get_rect()
-        text_rect.bottomleft = (10, altura - 10)
-        tela.blit(texto_superficie, text_rect)
+        desenha_vidas(texto_superficie,tela)
         
         pygame.display.update()  #Mostra o novo frame para o jogador
     if vidas == 0:

@@ -11,8 +11,8 @@ comprimento = 500
 altura = 450
 comprimento_fundo = 568
 altura_fundo = 513
-comprimento_letras = 40
-altura_letras = 40            
+dimensao_letras = 40
+           
 posicao_x_letra = 225
 posicao_y_letra = 0
 comprimento_jogador = 80       
@@ -21,8 +21,7 @@ comprimento_professor = 55
 altura_professor = 137
 comprimento_aviao = 30
 altura_aviao = 45
-comprimento_tela = 450
-altura_tela = 450
+dimensao_tela = 450
 comprimento_estrela = 34
 altura_estrela = 33
 
